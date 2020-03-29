@@ -13,19 +13,19 @@
               <div class="input-group-prepend">
                 <span class="input-group-text" id="FirstName">First Name</span>
               </div>
-              <%= text_field_tag(:FirstName, @user['first_name'], class: 'form-control', placeholder: 'First Name') %>
+              <%= text_field_tag(:FirstName, @user['first_name'], class: 'form-control', placeholder: 'First Name', :required => true) %>
             </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="LastName">Last Name</span>
               </div>
-              <%= text_field_tag(:LastName, @user['last_name'], class: 'form-control', placeholder: 'Last Name') %>
+              <%= text_field_tag(:LastName, @user['last_name'], class: 'form-control', placeholder: 'Last Name', :required => true) %>
             </div>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text" id="DOB">Date Of Birth</span>
               </div>
-              <%= date_field_tag(:DOB, @user['date_of_birth'], class: 'form-control', placeholder: 'Date Of Birth') %>
+              <%= date_field_tag(:DOB, Date.parse(@user['date_of_birth'].to_s), class: 'form-control', placeholder: 'Date Of Birth') %>
             </div>
           </div>
           <div class="modal-footer">

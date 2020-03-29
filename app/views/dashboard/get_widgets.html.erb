@@ -30,7 +30,7 @@
           <% else %>
             <a class="dropdown-item" data-toggle="modal" data-target="#loginModal">Login</a>
             <a class="dropdown-item" data-toggle="modal" data-target="#registerModal">Register</a>
-            <a class="dropdown-item" href="#">Forgot Password</a>
+            <a class="dropdown-item" data-toggle="modal" data-target="#resetPasswordModal">Forgot Password</a>
           <% end %>
         </div>
       </li>
@@ -57,34 +57,8 @@
   </nav>
   <br>  
   <div class="row" id="widgets">
-    <% if @widgets.empty? %>
-      <div class="col-sm-12">No Widgets To Show</div>
-    <% else %>
-      <% for widget in @widgets%>
-        <div class="col-sm-4">
-          <div class="card" style="width: 18rem;">
-            <% if @myWidgets %>
-              <div class="card-header">
-                <p><%= widget['kind'].humanize %> Widget</p>
-                <%= link_to 'Destroy',  {controller: "widgets", action: "delete", id: widget['id'] }, method: "delete", remote: true, data: { confirm: 'Are you sure?' } %>
-                <a href="#" data-toggle="modal" data-target="#updateWidget<%= widget['id'] %>Modal">Update</a>
-              </div>
-              <%= render :partial => 'partials/update_widget', locals: { widget: widget } %>
-            <% else %>
-              <img class="card-img-top" src="<%= widget['user']['images']['small_url'] %>">
-            <% end %>  
-            <div class="card-body">
-              <h5 class="card-title"><%= widget['name'] %></h5>
-              <p class="card-text"><%= widget['description'] %></p>
-              <% if !@myWidgets && @user %>
-                <%= link_to "#{widget['user']['first_name']} #{widget['user']['last_name']}", "/users/user/#{widget['user']['id']}", method: "get", remote: true, class: "btn btn-primary" %>
-              <% end %>  
-            </div>
-          </div>
-        </div>
-      <% end %>
-    <% end %>  
-  </div>  
+    <%= render :partial => 'partials/widgets' %> 
+  </div>
 </div>
 
 <%= render :partial => 'partials/login' %>
@@ -96,6 +70,8 @@
 <% end %>
 
 <%= render :partial => 'partials/change_password' %>
+
+<%= render :partial => 'partials/reset_password' %>
 
 <%= render :partial => 'partials/create_widget' %>
 

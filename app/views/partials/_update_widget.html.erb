@@ -13,13 +13,13 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="Name">Name</span>
             </div>
-            <%= text_field_tag(:Name, widget['name'], class: 'form-control', placeholder: 'Name') %>
+            <%= text_field_tag(:Name, widget['name'], class: 'form-control', placeholder: 'Name', :required => true) %>
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text" id="Description">Description</span>
             </div>
-            <%= text_field_tag(:Description, widget['description'], class: 'form-control', placeholder: 'Description') %>
+            <%= text_field_tag(:Description, widget['description'], class: 'form-control', placeholder: 'Description', :required => true) %>
           </div>
         </div>
         <div class="modal-footer">

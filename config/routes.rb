@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post 'users/create'
   put 'users/update'
   post 'users/change_password'
+  post 'users/reset_password'
 
   post 'widgets/create'
   put 'widgets/update/:id', :to => 'widgets#update'
