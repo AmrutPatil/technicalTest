@@ -1,0 +1,38 @@
+<div class="modal fade" id="createWidgetModal" tabindex="-1" role="dialog" aria-labelledby="createWidgetModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <%= form_tag({controller: 'widgets', action: "create"}, method: "post", remote: true) do %>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createWidgetModalLabel">Create Widget</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Name">Name</span>
+            </div>
+            <%= text_field_tag(:Name, '', class: 'form-control', placeholder: 'Name') %>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Description">Description</span>
+            </div>
+            <%= text_field_tag(:Description, '', class: 'form-control', placeholder: 'Description') %>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Type">Type</span>
+            </div>
+            <%= select_tag(:Type, options_for_select(['visible', 'hidden']), class: 'form-control', placeholder: 'Select Type') %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= submit_tag("Create", :class => 'btn btn-primary') %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

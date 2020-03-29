@@ -1,0 +1,6 @@
+<% if @res['message'] == "Success" %>
+  alert('Widget Updated successfully!');
+  location.reload();
+<% else %>
+  alert("<%= @res['message'] %>");
+<% end %>

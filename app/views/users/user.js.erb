@@ -1,0 +1,4 @@
+$('#userIdModal').html(
+  `<%= render :partial => "partials/user_id", locals: { user: @user } %>`
+);
+$('#userIdModal').modal('show');

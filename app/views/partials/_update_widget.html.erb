@@ -1,0 +1,32 @@
+<div class="modal fade" id="updateWidget<%= widget['id'] %>Modal" tabindex="-1" role="dialog" aria-labelledby="updateWidget<%= widget['id'] %>ModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <%= form_tag({controller: 'widgets', action: "update", id: widget['id']}, method: "put", remote: true) do %>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateWidget<%= widget['id'] %>ModalLabel">Widget <%= widget['id'] %> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Name">Name</span>
+            </div>
+            <%= text_field_tag(:Name, widget['name'], class: 'form-control', placeholder: 'Name') %>
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="Description">Description</span>
+            </div>
+            <%= text_field_tag(:Description, widget['description'], class: 'form-control', placeholder: 'Description') %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= submit_tag("Update", :class => 'btn btn-primary') %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

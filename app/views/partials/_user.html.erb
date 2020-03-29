@@ -1,0 +1,38 @@
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <%= form_tag({controller: 'users', action: "update"}, method: "put", remote: true) do %>
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="userModalLabel">Update Profile</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="FirstName">First Name</span>
+              </div>
+              <%= text_field_tag(:FirstName, @user['first_name'], class: 'form-control', placeholder: 'First Name') %>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="LastName">Last Name</span>
+              </div>
+              <%= text_field_tag(:LastName, @user['last_name'], class: 'form-control', placeholder: 'Last Name') %>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="DOB">Date Of Birth</span>
+              </div>
+              <%= date_field_tag(:DOB, @user['date_of_birth'], class: 'form-control', placeholder: 'Date Of Birth') %>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <%= submit_tag("Update", :class => 'btn btn-primary') %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>

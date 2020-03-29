@@ -1,0 +1,9 @@
+$('#createWidgetModal').find('form').trigger('reset');
+$('#createWidgetModal').find('.close').click();
+
+<% if @res['message'] == "Success" %>
+  alert('Widget created successfully!');
+  location.reload();
+<% else %>
+  alert("<%= @res['message'] %>");
+<% end %>

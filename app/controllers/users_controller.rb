@@ -1,4 +1,16 @@
 class UsersController < ApplicationController
+
+  def user
+    res = ApplicationHelper::RequestHelper.get("api/v1/users/#{params[:id]}", {}, { authorization: session[:access_token] })
+    @user = res['data']['user']
+  rescue Exception => e
+    @res = { 'message' => e.message }
+  ensure
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def create
     parameters = { client_id: $CLIENT_ID, client_secret: $CLIENT_SECRET }
     emailAvailability = ApplicationHelper::RequestHelper.get('api/v1/users/email', parameters.merge!({email: params[:Email]}))

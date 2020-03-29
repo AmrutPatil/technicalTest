@@ -1,0 +1,34 @@
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userIdModalLabel">Profile</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="FirstName">First Name</span>
+          </div>
+          <%= text_field_tag(:FirstName, user['first_name'], class: 'form-control', disabled: true) %>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="LastName">Last Name</span>
+          </div>
+          <%= text_field_tag(:LastName, user['last_name'], class: 'form-control', disabled: true) %>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="DOB">Date Of Birth</span>
+          </div>
+          <%= text_field_tag(:DOB, user['date_of_birth'], class: 'form-control', disabled: true) %>
+        </div>
+        <%= link_to "View Widgets", "/dashboard/get_widgets?user_id=#{user['id']}", method: "get", class: "btn btn-primary" %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>

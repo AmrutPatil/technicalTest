@@ -27,6 +27,13 @@ module ApplicationHelper
       )
       JSON.parse(res.body)
     end
+
+    def self.del(url, headers = {})
+      res = RestClient.delete("#{$API}#{url}", 
+        { "Authorization" => headers[:authorization] ? "Bearer " + headers[:authorization] : nil } 
+      )
+      JSON.parse(res.body)
+    end
   end
 
 end

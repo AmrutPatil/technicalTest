@@ -2,11 +2,16 @@
   <a class="navbar-brand" href="#">Technical Test</a>
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <%= link_to "Visible Widgets", "/dashboard/get_widgets", method: "get", class: "nav-link #{!@user || !@myWidgets ? 'active' : ''}" %>
+      <%= link_to "Visible Widgets", "/dashboard/get_widgets", method: "get", class: "nav-link #{!@myWidgets && !@otherUser ? 'active' : ''}" %>
     </li>
     <% if @user %>
       <li class="nav-item">
         <%= link_to "My Widgets", "/dashboard/get_widgets?my_widgets=true", method: "get", class: "nav-link #{@myWidgets ? 'active' : ''}" %>
+      </li>
+    <% end %>
+    <% if @user && @otherUser %>
+      <li class="nav-item">
+        <%= link_to "#{@otherUser['first_name']} #{@otherUser['last_name']}'s' Widgets", "#", method: "get", class: "nav-link active" %>
       </li>
     <% end %>
   </ul>
@@ -37,9 +42,15 @@
   <br>
   <nav class="navbar navbar-light bg-light">
     <% if @user && @myWidgets %>
-      <button type="button" class="btn btn-primary">Create Widget</button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createWidgetModal">Create Widget</button>
     <% end %>  
     <%= form_tag({controller: 'dashboard', action: "get_widgets"}, class: 'form-inline my-2 my-lg-0', method: "get", remote: true) do %>
+      <% if @myWidgets %>
+        <%= hidden_field_tag :my_widgets, true %>
+      <% end %>
+      <% if @otherUser %>
+        <%= hidden_field_tag :user_id, @otherUser['id'] %>
+      <% end %>
       <%= text_field_tag(:term, '', class: 'form-control mr-sm-2', placeholder: 'Search') %>
       <%= submit_tag("Search", :class => 'btn btn-outline-success my-2 my-sm-0') %>
     <% end %>
@@ -52,11 +63,22 @@
       <% for widget in @widgets%>
         <div class="col-sm-4">
           <div class="card" style="width: 18rem;">
-            <img class="card-img-top" src="<%= widget['user']['images']['small_url'] %>">
+            <% if @myWidgets %>
+              <div class="card-header">
+                <p><%= widget['kind'].humanize %> Widget</p>
+                <%= link_to 'Destroy',  {controller: "widgets", action: "delete", id: widget['id'] }, method: "delete", remote: true, data: { confirm: 'Are you sure?' } %>
+                <a href="#" data-toggle="modal" data-target="#updateWidget<%= widget['id'] %>Modal">Update</a>
+              </div>
+              <%= render :partial => 'partials/update_widget', locals: { widget: widget } %>
+            <% else %>
+              <img class="card-img-top" src="<%= widget['user']['images']['small_url'] %>">
+            <% end %>  
             <div class="card-body">
               <h5 class="card-title"><%= widget['name'] %></h5>
               <p class="card-text"><%= widget['description'] %></p>
-              <a href="#" class="btn btn-primary"><%= widget['user']['first_name'] %> <%= widget['user']['last_name'] %></a>
+              <% if !@myWidgets && @user %>
+                <%= link_to "#{widget['user']['first_name']} #{widget['user']['last_name']}", "/users/user/#{widget['user']['id']}", method: "get", remote: true, class: "btn btn-primary" %>
+              <% end %>  
             </div>
           </div>
         </div>
@@ -65,154 +87,17 @@
   </div>  
 </div>
 
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <%= form_tag({controller: 'authentication', action: "login"}, method: "post", remote: true) do %>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="Email">Username</span>
-            </div>
-            <%= email_field_tag(:Email, '', class: 'form-control', placeholder: 'Email') %>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="Password">Password</span>
-            </div>
-            <%= password_field_tag(:Password, '', class: 'form-control', placeholder: 'Password') %>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= submit_tag("Login", :class => 'btn btn-primary') %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-</div>
+<%= render :partial => 'partials/login' %>
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <%= form_tag({controller: 'users', action: "create"}, method: "post", remote: true) do %>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Register</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="FirstName">First Name</span>
-            </div>
-            <%= text_field_tag(:FirstName, '', class: 'form-control', placeholder: 'First Name') %>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="LastName">Last Name</span>
-            </div>
-            <%= text_field_tag(:LastName, '', class: 'form-control', placeholder: 'Last Name') %>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="Email">Email</span>
-            </div>
-            <%= email_field_tag(:Email, '', class: 'form-control', placeholder: 'Email') %>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="Password">Password</span>
-            </div>
-            <%= password_field_tag(:Password, '', class: 'form-control', placeholder: 'Password') %>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= submit_tag("Register", :class => 'btn btn-primary') %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-</div>
+<%= render :partial => 'partials/register' %>
 
 <% if @user %>
-  <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <%= form_tag({controller: 'users', action: "update"}, method: "put", remote: true) do %>
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="userModalLabel">Update Profile</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="FirstName">First Name</span>
-              </div>
-              <%= text_field_tag(:FirstName, @user['first_name'], class: 'form-control', placeholder: 'First Name') %>
-            </div>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="LastName">Last Name</span>
-              </div>
-              <%= text_field_tag(:LastName, @user['last_name'], class: 'form-control', placeholder: 'Last Name') %>
-            </div>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="DOB">Date Of Birth</span>
-              </div>
-              <%= date_field_tag(:DOB, @user['date_of_birth'], class: 'form-control', placeholder: 'Date Of Birth') %>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <%= submit_tag("Update", :class => 'btn btn-primary') %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
+  <%= render :partial => 'partials/user' %>
 <% end %>
 
-<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <%= form_tag({controller: 'users', action: "change_password"}, method: "post", remote: true) do %>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="OldPassword">Old Password</span>
-            </div>
-            <%= password_field_tag(:OldPassword, '', class: 'form-control', placeholder: 'Old Password') %>
-          </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="NewPassword">New Password</span>
-            </div>
-            <%= password_field_tag(:NewPassword, '', class: 'form-control', placeholder: 'New Password') %>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= submit_tag("Change Password", :class => 'btn btn-primary') %>
-        </div>
-      </div>
-    <% end %>
-  </div>
+<%= render :partial => 'partials/change_password' %>
+
+<%= render :partial => 'partials/create_widget' %>
+
+<div class="modal fade" id="userIdModal" tabindex="-1" role="dialog" aria-labelledby="userIdModalLabel" aria-hidden="true">
 </div>
