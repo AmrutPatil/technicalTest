@@ -1,0 +1,8 @@
+$('#loginModal').find('form').trigger('reset');
+$('#loginModal').find('.close').click();
+
+<% if @res['message'] == "Success" %>
+  location.reload();
+<% else %>
+  alert("<%= @res['message'] %>");
+<% end %>

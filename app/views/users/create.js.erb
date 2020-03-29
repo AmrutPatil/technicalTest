@@ -1,0 +1,8 @@
+$('#registerModal').find('form').trigger('reset');
+$('#registerModal').find('.close').click();
+
+<% if @res['message'] == "Success" %>
+  alert('User created successfully! Please try login.');
+<% else %>
+  alert("<%= @res['message'] %>");
+<% end %>

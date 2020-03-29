@@ -1,0 +1,8 @@
+$('#userModal').find('.close').click();
+
+<% if @res['message'] == "Success" %>
+  alert('User Updated successfully!');
+  location.reload();
+<% else %>
+  alert("<%= @res['message'] %>");
+<% end %>

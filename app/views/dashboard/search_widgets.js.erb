@@ -1,0 +1,14 @@
+$('#widgets').html(
+  '<% for widget in @widgets%>'+
+    '<div class="col-sm-4">'+
+      '<div class="card" style="width: 18rem;">'+
+        '<img class="card-img-top" src="<%= widget['user']['images']['small_url'] %>">'+
+        '<div class="card-body">'+
+          '<h5 class="card-title"><%= widget['name'] %></h5>'+
+          '<p class="card-text"><%= widget['description'] %></p>'+
+          '<a href="#" class="btn btn-primary"><%= widget['user']['first_name'] %> <%= widget['user']['last_name'] %></a>'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '<% end %>'
+);
