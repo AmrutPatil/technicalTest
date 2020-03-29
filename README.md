@@ -11,3 +11,7 @@ As this application wraps existing API, it does not need a database connection. 
 2. goto respository and run 'bundle install' command
 3. then run 'rails s'
 4. access 'http://localhost:3000/' url in browser
+
+## Testing
+1. goto repository and run 'rails test'
+2. you will find code coverage in coverage/index.html
